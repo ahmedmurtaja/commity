@@ -3,6 +3,7 @@ const colors = require('colors');
 const { log, clear } = require('console');
 const readlineSync = require('readline-sync');
 
+let message = '';
 const choices = [
   {
     name: 'build: Changes that affect the build system or external dependencies',
@@ -44,7 +45,6 @@ const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  terminal: true,
 });
 
 let selectedIndex = 0;
@@ -66,7 +66,7 @@ function displayChoices() {
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  exec('git add .', (error, stdout, stderr) => {
+  exec('git add . ', (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);
       return;
@@ -85,7 +85,11 @@ rl.input.on('keypress', (_, key) => {
   } else if (key.name === 'return') {
     const choice = choices[selectedIndex];
     console.log(`You selected: ${choice.name}`);
-    const message = choice.name;
+     message += choice.value;
+    rl.question('Enter the Scope of the Work you done ', (answer) => {
+      message += `: ${answer}`;
+      console.log(`You entered: ${message}`);
+    });
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
         log(`exec error: ${error.code}`.red);
@@ -97,7 +101,10 @@ rl.input.on('keypress', (_, key) => {
             `You have un-staged files. Would you like to add them? (y/n)`.red
           );
 
-          const answer = readlineSync.question('y/n: ');
+          const answer = readlineSync.question('y/n: ', {
+            limit: ['y', 'n'],
+            limitMessage: 'Please enter y or n',
+            });
           if (answer === 'y') {
             handleUnStagedFiles();
           } else {
@@ -112,8 +119,7 @@ rl.input.on('keypress', (_, key) => {
         }
       }
 
-      console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
+      console.log(`${stdout}`);
       rl.close();
     });
   }
