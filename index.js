@@ -68,13 +68,18 @@ function displayChoices() {
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  exec('git add . ', (error, stdout, stderr) => {
+  execSync(`git add .` , (error, stdout, stderr) => {
     if (error) {
-      console.error(`exec error: ${error}`);
       return;
     }
-    console.log(`stdout: ${stdout}`);
+    console.log(`${stdout}`);
   });
+  execSync(`git commit -m "${message}"` , (error, stdout, stderr) => {
+    if (error) {
+      return;
+    }
+    console.log(`${stdout}`);
+  } );
 };
 
 rl.input.on('keypress', (_, key) => {
@@ -96,7 +101,6 @@ rl.input.on('keypress', (_, key) => {
 
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
-        log(`exec error: ${error.code}`.red);
         if (error.code === 1) {
           log('You have unstaged files. Please stage them first.'.red);
           log('Unstaged files:'.red);
@@ -105,11 +109,13 @@ rl.input.on('keypress', (_, key) => {
             `You have un-staged files. Would you like to add them? (y/n)`.red
           );
 
+          
+
           const answer = readlineSync.question('y/n: ', {
             limit: ['y', 'n'],
             limitMessage: 'Please enter y or n',
           });
-          if (answer === 'y') {
+          if (answer.toLowerCase() === 'y') {
             handleUnStagedFiles();
           } else {
             log('Exiting...'.red);
