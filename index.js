@@ -43,6 +43,41 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
+const sleep = (milliseconds) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+};
+
+handleGitIgnoreFile = () => {
+  exec(`touch .gitignore`, (error, stdout, stderr) => {
+    if (error) {
+      return;
+    }
+  });
+  exec(`echo "node_modules/" >> .gitignore`, (error, stdout, stderr) => {
+    if (error) {
+      return;
+    }
+    log('\n Created .gitignore file'.yellow.bold);
+  });
+};
+
+const flag = execSync('ls -a', { encoding: 'utf-8' }).includes('.gitignore');
+
+if (!flag) {
+  log('No .gitignore file found'.red.bold);
+  sleep(200);
+  log('Creating .gitignore file'.yellow.bold);
+  sleep(200);
+  log('Adding node_modules/ to .gitignore'.yellow.bold);
+  sleep(200);
+  readlineSync.question('Press enter to continue...'.yellow.bold);
+  handleGitIgnoreFile();
+}
+
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -53,8 +88,8 @@ let selectedIndex = 0;
 
 function displayChoices() {
   console.clear();
-  execSync('clear');
-  log('Use arrow keys to navigate. Press enter to select.'.green);
+  log('Select the type of commit you want to make:'.green);
+  log('Use arrow keys to navigate. Press enter to select.');
   choices.forEach((c, idx) => {
     if (idx === selectedIndex) {
       console.log(
@@ -104,9 +139,7 @@ rl.input.on('keypress', (_, key) => {
         if (error.code === 1) {
           log('You have un staged files.'.red);
           log(execSync('git status --porcelain', { encoding: 'utf-8' }));
-          log(
-            ` Would you like to add them? (y/n)`.red
-          );
+          log(` Would you like to add them? (y/n)`.red);
 
           const answer = readlineSync.question('y/n: ', {
             limit: ['y', 'n'],
@@ -120,8 +153,6 @@ rl.input.on('keypress', (_, key) => {
             log('use: git add <file-name>'.red);
             process.exit(0);
           }
-
-       
         }
       }
 
@@ -129,4 +160,3 @@ rl.input.on('keypress', (_, key) => {
     });
   }
 });
-
