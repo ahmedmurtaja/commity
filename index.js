@@ -43,6 +43,14 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
+const sleep = (milliseconds) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+};
+
 handleGitIgnoreFile = () => {
   exec(`touch .gitignore`, (error, stdout, stderr) => {
     if (error) {
@@ -55,12 +63,18 @@ handleGitIgnoreFile = () => {
     }
     log('\n Created .gitignore file'.yellow.bold);
   });
-
 };
 
 const flag = execSync('ls -a', { encoding: 'utf-8' }).includes('.gitignore');
 
 if (!flag) {
+  log('No .gitignore file found'.red.bold);
+  sleep(200);
+  log('Creating .gitignore file'.yellow.bold);
+  sleep(200);
+  log('Adding node_modules/ to .gitignore'.yellow.bold);
+  sleep(200);
+  readlineSync.question('Press enter to continue...'.yellow.bold);
   handleGitIgnoreFile();
 }
 
@@ -74,7 +88,8 @@ let selectedIndex = 0;
 
 function displayChoices() {
   console.clear();
-  log('Use arrow keys to navigate. Press enter to select.'.green);
+  log('Select the type of commit you want to make:'.green);
+  log('Use arrow keys to navigate. Press enter to select.');
   choices.forEach((c, idx) => {
     if (idx === selectedIndex) {
       console.log(
@@ -145,8 +160,3 @@ rl.input.on('keypress', (_, key) => {
     });
   }
 });
-
-
-
-
-
