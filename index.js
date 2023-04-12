@@ -43,6 +43,22 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
+handleGitIgnoreFile = () => {
+  exec(`touch .gitignore`, (error, stdout, stderr) => {
+    if (error) {
+      return;
+    }
+  });
+  exec(`echo "node_modules/" >> .gitignore`, (error, stdout, stderr) => {
+    if (error) {
+      return;
+    }
+
+    log('Git ignore file created successfully'.green);
+  });
+};
+
+
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -53,7 +69,6 @@ let selectedIndex = 0;
 
 function displayChoices() {
   console.clear();
-  execSync('clear');
   log('Use arrow keys to navigate. Press enter to select.'.green);
   choices.forEach((c, idx) => {
     if (idx === selectedIndex) {
