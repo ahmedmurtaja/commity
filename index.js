@@ -3,6 +3,8 @@ const colors = require('colors');
 const { log, clear } = require('console');
 const readlineSync = require('readline-sync');
 
+const prompt = require('prompt-sync')();
+
 let message = '';
 const choices = [
   {
@@ -86,13 +88,9 @@ rl.input.on('keypress', (_, key) => {
     const choice = choices[selectedIndex];
     console.log(`You selected: ${choice.name}`);
     message += choice.value;
-    const scope = readlineSync.question(
-      'Enter the Scope of the Work you done '
-    );
+    const scope = prompt('Enter the scope of the work you done: ');
     message += `(${scope}): `;
-    const description = readlineSync.question(
-      'Enter a short description of the work you done '
-    );
+    const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
     console.log(`Your commit message is: ${message}`);
 
