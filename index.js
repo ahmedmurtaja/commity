@@ -102,8 +102,8 @@ rl.input.on('keypress', (_, key) => {
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
         if (error.code === 1) {
-          log('You have unstaged files. Please stage them first.'.red);
-          log('Unstaged files:'.red);
+          log('You have un staged files.'.red);
+          log('Un staged files:'.red);
           log(execSync('git status --porcelain', { encoding: 'utf-8' }));
           log(
             `You have un-staged files. Would you like to add them? (y/n)`.red
@@ -113,7 +113,7 @@ rl.input.on('keypress', (_, key) => {
             limit: ['y', 'n'],
             limitMessage: 'Please enter y or n',
           });
-          if (answer.toLowerCase() === 'y') {
+          if (answer === 'y') {
             handleUnStagedFiles();
           } else {
             log('Exiting...'.red);
