@@ -85,11 +85,17 @@ rl.input.on('keypress', (_, key) => {
   } else if (key.name === 'return') {
     const choice = choices[selectedIndex];
     console.log(`You selected: ${choice.name}`);
-     message += choice.value;
-    rl.question('Enter the Scope of the Work you done ', (answer) => {
-      message += `: ${answer}`;
-      console.log(`You entered: ${message}`);
-    });
+    message += choice.value;
+    const scope = readlineSync.question(
+      'Enter the Scope of the Work you done '
+    );
+    message += `(${scope}): `;
+    const description = readlineSync.question(
+      'Enter a short description of the work you done '
+    );
+    message += `${description}`;
+    console.log(`Your commit message is: ${message}`);
+
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
         log(`exec error: ${error.code}`.red);
@@ -104,7 +110,7 @@ rl.input.on('keypress', (_, key) => {
           const answer = readlineSync.question('y/n: ', {
             limit: ['y', 'n'],
             limitMessage: 'Please enter y or n',
-            });
+          });
           if (answer === 'y') {
             handleUnStagedFiles();
           } else {
