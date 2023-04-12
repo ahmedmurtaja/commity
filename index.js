@@ -53,7 +53,9 @@ handleGitIgnoreFile = () => {
     if (error) {
       return;
     }
+    log('Created .gitignore file'.green);
   });
+
 };
 
 const flag = execSync('ls -a', { encoding: 'utf-8' }).includes('.gitignore');
