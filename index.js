@@ -43,7 +43,7 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
-handleGitIgnoreFile = () => {
+const handleGitIgnoreFile = () => {
   exec(`touch .gitignore`, (error, stdout, stderr) => {
     if (error) {
       return;
@@ -151,5 +151,7 @@ rl.input.on('keypress', (_, key) => {
     console.log(`Your commit message is: ${message}`);
 
     handleCommits();
+
+    rl.close();
   }
 });
