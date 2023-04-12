@@ -53,7 +53,7 @@ handleGitIgnoreFile = () => {
     if (error) {
       return;
     }
-    log('Created .gitignore file'.green);
+    log('\n Created .gitignore file'.yellow.bold);
   });
 
 };
