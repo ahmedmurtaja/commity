@@ -55,9 +55,9 @@ handleGitIgnoreFile = () => {
     }
 
     log('Git ignore file created successfully'.green);
+    handleCommits();
   });
 };
-
 
 const readline = require('readline');
 const rl = readline.createInterface({
@@ -97,6 +97,35 @@ const handleUnStagedFiles = (files) => {
   });
 };
 
+const handleCommits = (files) => {
+  exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
+    if (error) {
+      if (error.code === 1) {
+        log('You have un staged files.'.red);
+        log(execSync('git status --porcelain', { encoding: 'utf-8' }));
+        log(` Would you like to add them? (y/n)`.red);
+
+        const answer = readlineSync.question('y/n: ', {
+          limit: ['y', 'n'],
+          limitMessage: 'Please enter y or n',
+        });
+        if (answer === 'y') {
+          handleUnStagedFiles();
+        } else {
+          log('Exiting...'.red);
+          log('Please stage your files and try again.'.red);
+          log('use: git add <file-name>'.red);
+          process.exit(0);
+        }
+      }
+    }
+
+    console.log(`Commit successful`.green.bold);
+
+    process.exit(0);
+  });
+};
+
 rl.input.on('keypress', (_, key) => {
   if (key.name === 'up') {
     selectedIndex = Math.max(selectedIndex - 1, 0);
@@ -114,51 +143,13 @@ rl.input.on('keypress', (_, key) => {
     message += `${description}`;
     console.log(`Your commit message is: ${message}`);
 
-    exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
-      if (error) {
-        if (error.code === 1) {
-          log('You have un staged files.'.red);
-          log(execSync('git status --porcelain', { encoding: 'utf-8' }));
-          log(
-            ` Would you like to add them? (y/n)`.red
-          );
+    const flag = execSync('ls -a', { encoding: 'utf-8' }).includes(
+      '.gitignore'
+    );
+    if (!flag) {
+      handleGitIgnoreFile();
+    }
 
-          const answer = readlineSync.question('y/n: ', {
-            limit: ['y', 'n'],
-            limitMessage: 'Please enter y or n',
-          });
-          if (answer === 'y') {
-            handleUnStagedFiles();
-          } else {
-            log('Exiting...'.red);
-            log('Please stage your files and try again.'.red);
-            log('use: git add <file-name>'.red);
-            process.exit(0);
-          }
-
-       
-        }
-      }
-
-      rl.close();
-    });
+    handleCommits();
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
