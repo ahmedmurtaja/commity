@@ -101,6 +101,13 @@ const handleCommits = (files) => {
   exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
     if (error) {
       if (error.code === 1) {
+        const flag = execSync('ls -a', { encoding: 'utf-8' }).includes(
+          '.gitignore'
+        );
+        if (!flag) {
+          handleGitIgnoreFile();
+        }
+
         log('You have un staged files.'.red);
         log(execSync('git status --porcelain', { encoding: 'utf-8' }));
         log(` Would you like to add them? (y/n)`.red);
@@ -142,13 +149,6 @@ rl.input.on('keypress', (_, key) => {
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
     console.log(`Your commit message is: ${message}`);
-
-    const flag = execSync('ls -a', { encoding: 'utf-8' }).includes(
-      '.gitignore'
-    );
-    if (!flag) {
-      handleGitIgnoreFile();
-    }
 
     handleCommits();
   }
