@@ -68,12 +68,12 @@ function displayChoices() {
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  execSync(`git add .`, (error, stdout, stderr) => {
+  exec(`git add .`, (error, stdout, stderr) => {
     if (error) {
       return;
     }
   });
-  execSync(`git commit -m "${message}"`, (error, stdout, stderr) => {
+  exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
     if (error) {
       log('Something went wrong. Please try again.'.red);
       return;
