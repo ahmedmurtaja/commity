@@ -68,18 +68,18 @@ function displayChoices() {
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  execSync(`git add .` , (error, stdout, stderr) => {
+  execSync(`git add .`, (error, stdout, stderr) => {
     if (error) {
       return;
     }
-    console.log(`${stdout}`);
   });
-  execSync(`git commit -m "${message}"` , (error, stdout, stderr) => {
+  execSync(`git commit -m "${message}"`, (error, stdout, stderr) => {
     if (error) {
+      log('Something went wrong. Please try again.'.red);
       return;
     }
-    console.log(`${stdout}`);
-  } );
+    console.log(`Commit successful`.green.bold);
+  });
 };
 
 rl.input.on('keypress', (_, key) => {
@@ -109,8 +109,6 @@ rl.input.on('keypress', (_, key) => {
             `You have un-staged files. Would you like to add them? (y/n)`.red
           );
 
-          
-
           const answer = readlineSync.question('y/n: ', {
             limit: ['y', 'n'],
             limitMessage: 'Please enter y or n',
@@ -124,12 +122,10 @@ rl.input.on('keypress', (_, key) => {
             process.exit(0);
           }
 
-          // @TODO - Handle case where user enters something other than y/n
-          // @TODO -Handle gitingore files ls -A | grep -v -e '^\.' | grep -v -e '^\..*'
+       
         }
       }
 
-      console.log(`${stdout}`);
       rl.close();
     });
   }
