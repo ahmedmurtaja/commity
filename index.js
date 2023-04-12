@@ -132,5 +132,5 @@ rl.input.on('keypress', (_, key) => {
 });
 
 rl.on('close', () => {
-  console.log('Exiting...'.red);
+  console.log('\n Exiting...'.red);
 });
