@@ -79,6 +79,9 @@ if (!flag) {
   handleGitIgnoreFile();
 }
 
+
+
+
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -133,7 +136,7 @@ rl.input.on('keypress', (_, key) => {
     message += `(${scope}): `;
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
-    console.log(`Your commit message is: ${message}`);
+    console.log(`\n Your commit message is:  `.yellow +`${message}`.green);
 
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
@@ -161,5 +164,4 @@ rl.input.on('keypress', (_, key) => {
     });
   }
 });
-
 
