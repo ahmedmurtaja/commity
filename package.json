@@ -16,5 +16,6 @@
     "prompt-sync": "^4.2.0",
     "readline-sync": "^1.4.10"
   },
+  "repository": "https://github.com/ahmedmurtaja/commity",
   "homepage": "https://github.com/ahmedmurtaja/commity#readme"
 }
