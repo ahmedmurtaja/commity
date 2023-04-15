@@ -175,7 +175,7 @@ rl.input.on('keypress', (_, key) => {
           }
         }
       }
-      log(`Commit successful`.green.bold);
+      else log(`Commit successful`.green.bold);
 
       rl.close();
     });
