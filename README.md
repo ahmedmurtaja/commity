@@ -32,5 +32,5 @@ Commity is a command line tool. You can use it by typing ``npx commity`` in your
 
 ## Contributors
 
--Ahmed Izz Murtaja
+- Ahmed Izz Murtaja
 
