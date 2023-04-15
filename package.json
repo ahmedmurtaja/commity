@@ -8,7 +8,21 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "commit",
+    "commit message",
+    "commit messages",
+    "git",
+    "git commit",
+    "git commit message",
+    "git commit messages",
+    "git commit message generator",
+    "git commit message generators",
+    "git commit message generator cli",
+    "git commit message generator cli tool",
+    "git commit message",
+    "commity"
+  ],
   "author": "Ahmed Izz Murtaja",
   "license": "ISC",
   "dependencies": {
