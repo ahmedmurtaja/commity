@@ -3,7 +3,7 @@ const { exec, execSync } = require('child_process');
 const colors = require('colors');
 const { log, clear } = require('console');
 const readlineSync = require('readline-sync');
-
+const readline = require('readline');
 const prompt = require('prompt-sync')();
 
 let message = '';
@@ -66,6 +66,26 @@ handleGitIgnoreFile = () => {
   });
 };
 
+const isGitRepo = execSync('ls -a', {
+  encoding: 'utf-8',
+}).includes('.git');
+
+console.log(isGitRepo);
+
+if (!isGitRepo) {
+  log('No git repository found'.red.bold);
+  sleep(200);
+  log('Initializing git repository'.yellow.bold);
+  sleep(200);
+  exec(`git init`, (error, stdout, stderr) => {
+    if (error) {
+      log('Something went wrong. Please try again.'.red);
+      return;
+    }
+    log('\n Initialized git repository'.yellow.bold);
+  });
+}
+
 const flag = execSync('ls -a', { encoding: 'utf-8' }).includes('.gitignore');
 
 if (!flag) {
@@ -79,10 +99,6 @@ if (!flag) {
   handleGitIgnoreFile();
 }
 
-
-
-
-const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -117,7 +133,7 @@ const handleUnStagedFiles = (files) => {
       log('Something went wrong. Please try again.'.red);
       return;
     }
-    console.log(`Commit successful`.green.bold);
+    log(`Commit successful`.green.bold);
   });
 };
 
@@ -136,7 +152,7 @@ rl.input.on('keypress', (_, key) => {
     message += `(${scope}): `;
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
-    console.log(`\n Your commit message is:  `.yellow +`${message}`.green);
+    console.log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
       if (error) {
@@ -159,9 +175,9 @@ rl.input.on('keypress', (_, key) => {
           }
         }
       }
+      else log(`Commit successful`.green.bold);
 
       rl.close();
     });
   }
 });
-
