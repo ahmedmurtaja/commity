@@ -73,7 +73,6 @@ const isGitRepo = execSync('ls -a', {
   encoding: 'utf-8',
 }).includes('.git');
 
-console.log(isGitRepo);
 
 if (!isGitRepo) {
   log('No git repository found'.red.bold);
@@ -109,8 +108,8 @@ const rl = readline.createInterface({
 
 let selectedIndex = 0;
 
-function displayChoices() {
-  console.clear();
+const displayChoices = () => {
+  clear();
   log('Select the type of commit you want to make:'.inverse);
   log('Use arrow keys to navigate. Press enter to select.'.inverse);
   choices.forEach((c, idx) => {
@@ -122,6 +121,7 @@ function displayChoices() {
     }
   });
 }
+
 
 displayChoices();
 
@@ -146,7 +146,6 @@ const commit = () => {
     if (error) {
       if (error.code === 1) {
         log('You have un staged files.'.red);
-        // handle colors of un staged files
         let color = execSync('git status --porcelain', { encoding: 'utf-8' });
         color = color.split(' ');
         color = color.map((c) => c.replace('M', ' M '.white.bgYellow.bold));
