@@ -149,8 +149,11 @@ const commit = () => {
         // handle colors of un staged files
         let color = execSync('git status --porcelain', { encoding: 'utf-8' });
         color = color.split(' ');
-        color = color.map((c) => c.replace('M', 'M'.white.bgYellow.bold));
-
+        color = color.map((c) => c.replace('M', ' M '.white.bgYellow.bold));
+        color = color.map((c) => c.replace('??', ' ?? '.white.bgRed.bold));
+        color = color.map((c) => c.replace('A', ' A '.white.bgGreen.bold));
+        color = color.map((c) => c.replace('D', ' D '.white.bgRed.bold));
+        color = color.map((c) => c.replace('R', ' R '.white.bgBlue.bold));
 
         log(color.join(' '));
         log(` Would you like to add them? (y/n)`.red);
