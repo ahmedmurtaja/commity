@@ -136,7 +136,35 @@ const handleUnStagedFiles = (files) => {
     log(`Commit successful`.green.bold);
   });
 };
+const commit = () => {
+  exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
+    if (error) {
+      if (error.code === 1) {
+        log('You have un staged files.'.red);
+        log(execSync('git status --porcelain', { encoding: 'utf-8' }));
+        log(` Would you like to add them? (y/n)`.red);
 
+        const answer = readlineSync.question('y/n: ', {
+          limit: ['y', 'n'],
+          limitMessage: 'Please enter y or n',
+          hideEchoBack: false,
+        });
+        if (answer === 'y') {
+          handleUnStagedFiles();
+        } else {
+          log('Exiting...'.red);
+          log('Please stage your files and try again.'.red);
+          log('use: git add <file-name>'.red);
+          process.exit(0);
+        }
+      }
+    }
+    else log(`Commit successful`.green.bold);
+
+    rl.close();
+  });
+
+}
 rl.input.on('keypress', (_, key) => {
   if (key.name === 'up') {
     selectedIndex = Math.max(selectedIndex - 1, 0);
@@ -154,38 +182,16 @@ rl.input.on('keypress', (_, key) => {
     message += `${description}`;
     const issueNumber = prompt('Enter the issue number: ');
     message += ` Relates #${issueNumber}`;
-    if(readlineSync.keyInYN('Do you want to close the issue?'))
-    {
+    if (readlineSync.keyInYN('Do you want to close the issue?')) {
       message += `
        Closes #${issueNumber}`;
     }
-    console.log(`\n Your commit message is:  `.yellow.inverse + `${message}`.green.inverse);
+    log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
-    exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
-      if (error) {
-        if (error.code === 1) {
-          log('You have un staged files.'.red);
-          log(execSync('git status --porcelain', { encoding: 'utf-8' }));
-          log(` Would you like to add them? (y/n)`.red);
+    if (readlineSync.keyInYN('Do you want to commit?')) {
+      commit();
+    }
 
-          const answer = readlineSync.question('y/n: ', {
-            limit: ['y', 'n'],
-            limitMessage: 'Please enter y or n',
-            hideEchoBack: false,
-          });
-          if (answer === 'y') {
-            handleUnStagedFiles();
-          } else {
-            log('Exiting...'.red);
-            log('Please stage your files and try again.'.red);
-            log('use: git add <file-name>'.red);
-            process.exit(0);
-          }
-        }
-      }
-      else log(`Commit successful`.green.bold);
 
-      rl.close();
-    });
   }
 });
