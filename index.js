@@ -152,6 +152,18 @@ rl.input.on('keypress', (_, key) => {
     message += `(${scope}): `;
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
+    const issueNumber = prompt('Enter the issue number: ');
+    message += ` Relates #${issueNumber}`;
+    log("Do You want to close the issue? (y/n) ".red);
+    const answer = readlineSync.question('y/n: ', {
+      limit: ['y', 'n'],
+      limitMessage: 'Please enter y or n',
+    });
+    if (answer === 'y') {
+      message += `
+       Closes #${issueNumber}`;
+    }
+    
     console.log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
