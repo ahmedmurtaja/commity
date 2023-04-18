@@ -158,12 +158,13 @@ rl.input.on('keypress', (_, key) => {
     const answer = readlineSync.question('y/n: ', {
       limit: ['y', 'n'],
       limitMessage: 'Please enter y or n',
+      hideEchoBack: false,
     });
     if (answer === 'y') {
       message += `
        Closes #${issueNumber}`;
     }
-    
+
     console.log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
     exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
@@ -176,6 +177,7 @@ rl.input.on('keypress', (_, key) => {
           const answer = readlineSync.question('y/n: ', {
             limit: ['y', 'n'],
             limitMessage: 'Please enter y or n',
+            hideEchoBack: false,
           });
           if (answer === 'y') {
             handleUnStagedFiles();
