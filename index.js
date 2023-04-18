@@ -5,7 +5,6 @@ const { log, clear } = require('console');
 const readlineSync = require('readline-sync');
 const readline = require('readline');
 const prompt = require('prompt-sync')();
-const inquirer = require('inquirer');
 
 let message = '';
 const choices = [
