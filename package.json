@@ -1,5 +1,6 @@
 {
   "name": "commity",
+  "type": "commonjs",
   "version": "1.0.8",
   "description": "A simple CLI tool to generate commit messages",
   "main": "index.js",
@@ -27,6 +28,7 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
+    "inquirer": "^8.2.5",
     "prompt-sync": "^4.2.0",
     "readline-sync": "^1.4.10"
   },
