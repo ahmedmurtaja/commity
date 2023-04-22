@@ -125,20 +125,10 @@ const displayChoices = () => {
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  exec(`git add .`, (error, stdout, stderr) => {
-    if (error) {
-      return;
-    }
-  });
-  exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
-    if (error) {
-      log('Something went wrong. Please try again.'.red);
-      log("Here's the error message:".red);
-      log(error.message);
-      return;
-    }
-    log(`Commit successful`.green.bold);
-  });
+  execSync(`git add .`)
+  execSync(`git commit -m "${message}"`)
+  log(`Commit successful`.green.bold);
+
 };
 const commit = () => {
   exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
@@ -196,7 +186,7 @@ rl.input.on('keypress', (_, key) => {
     message += ` Relates #${issueNumber}`;
     if (readlineSync.keyInYN('Do you want to close the issue?')) {
       message += `
-       Closes #${issueNumber}`;
+Closes #${issueNumber}`;
     }
     log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
