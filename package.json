@@ -1,4 +1,36 @@
 {
-  "name": "committy",
-  "packageManager": "yarn@3.5.0"
+  "name": "commity",
+  "type": "commonjs",
+  "version": "1.0.10",
+  "description": "A simple CLI tool to generate commit messages",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "commit",
+    "commit message",
+    "commit messages",
+    "git",
+    "git commit",
+    "git commit message",
+    "git commit messages",
+    "git commit message generator",
+    "git commit message generators",
+    "git commit message generator cli",
+    "git commit message generator cli tool",
+    "git commit message",
+    "commity"
+  ],
+  "author": "Ahmed Izz Murtaja",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "prompt-sync": "^4.2.0",
+    "readline-sync": "^1.4.10"
+  },
+  "repository": "https://github.com/ahmedmurtaja/commity.git",
+  "homepage": "https://github.com/ahmedmurtaja/commity#readme"
 }
