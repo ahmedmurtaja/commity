@@ -44,7 +44,7 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
-const listFilesCommand = process.platform === "win32" ? "dir" : "ls -a";
+
 
 const sleep = (milliseconds) => {
   const date = Date.now();
@@ -68,7 +68,7 @@ handleGitIgnoreFile = () => {
   });
 };
 
-const isGitRepo = execSync(listFilesCommand, {
+const isGitRepo = execSync('ls -a', {
   encoding: 'utf-8',
 }).includes('.git');
 
@@ -87,7 +87,7 @@ if (!isGitRepo) {
   });
 }
 
-const flag = execSync(listFilesCommand, { encoding: 'utf-8' }).includes('.gitignore');
+const flag = execSync('ls -a', { encoding: 'utf-8' }).includes('.gitignore');
 
 if (!flag) {
   log('No .gitignore file found'.red.bold);
