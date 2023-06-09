@@ -6,6 +6,13 @@ const readlineSync = require('readline-sync');
 const readline = require('readline');
 const prompt = require('prompt-sync')();
 
+execSync('npx husky install');
+exec(`echo ".huskyrc.json" >> .gitignore`, (error, stdout, stderr) => {
+  if (error) {
+    return;
+  }
+});
+
 let message = '';
 const choices = [
   {
@@ -44,7 +51,7 @@ const choices = [
   { name: "other: Doesn't fit any of the suggested types?", value: 'other' },
 ];
 
-const listFilesCommand = process.platform === "win32" ? "dir" : "ls -a";
+const listFilesCommand = process.platform === 'win32' ? 'dir' : 'ls -a';
 
 const sleep = (milliseconds) => {
   const date = Date.now();
@@ -72,7 +79,6 @@ const isGitRepo = execSync(listFilesCommand, {
   encoding: 'utf-8',
 }).includes('.git');
 
-
 if (!isGitRepo) {
   log('No git repository found'.red.bold);
   sleep(200);
@@ -87,7 +93,9 @@ if (!isGitRepo) {
   });
 }
 
-const flag = execSync(listFilesCommand, { encoding: 'utf-8' }).includes('.gitignore');
+const flag = execSync(listFilesCommand, { encoding: 'utf-8' }).includes(
+  '.gitignore'
+);
 
 if (!flag) {
   log('No .gitignore file found'.red.bold);
@@ -119,16 +127,14 @@ const displayChoices = () => {
       );
     }
   });
-}
-
+};
 
 displayChoices();
 
 const handleUnStagedFiles = (files) => {
-  execSync(`git add .`)
-  execSync(`git commit -m "${message}"`)
+  execSync(`git add .`);
+  execSync(`git commit -m "${message}"`);
   log(`Commit successful`.green.bold);
-
 };
 const commit = () => {
   exec(`git commit -m "${message}"`, (error, stdout, stderr) => {
@@ -160,13 +166,11 @@ const commit = () => {
           process.exit(0);
         }
       }
-    }
-    else log(`Commit successful`.green.bold);
+    } else log(`Commit successful`.green.bold);
 
     rl.close();
   });
-
-}
+};
 rl.input.on('keypress', (_, key) => {
   if (key.name === 'up') {
     selectedIndex = Math.max(selectedIndex - 1, 0);
@@ -183,17 +187,17 @@ rl.input.on('keypress', (_, key) => {
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
     const issueNumber = prompt('Enter the issue number: ');
-    message += ` Relates #${issueNumber}`;
-    if (readlineSync.keyInYN('Do you want to close the issue?')) {
-      message += `
-Closes #${issueNumber}`;
+    if (Number.isInteger(issueNumber)) {
+      message += ` Relates #${issueNumber}`;
+      if (readlineSync.keyInYN('Do you want to close the issue?')) {
+        message += `
+Closed #${issueNumber}`;
+      }
     }
     log(`\n Your commit message is:  `.yellow + `${message}`.green);
 
     if (readlineSync.keyInYN('Do you want to commit?')) {
       commit();
     }
-
-
   }
 });
