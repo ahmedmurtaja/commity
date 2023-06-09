@@ -6,13 +6,6 @@ const readlineSync = require('readline-sync');
 const readline = require('readline');
 const prompt = require('prompt-sync')();
 
-execSync('npx husky install');
-exec(`echo ".huskyrc.json" >> .gitignore`, (error, stdout, stderr) => {
-  if (error) {
-    return;
-  }
-});
-
 let message = '';
 const choices = [
   {
@@ -182,11 +175,11 @@ rl.input.on('keypress', (_, key) => {
     const choice = choices[selectedIndex];
     console.log(`You selected: ${choice.name}`);
     message += choice.value;
-    const scope = prompt('Enter the scope of the work you done: ');
+    const scope = prompt(`Enter the `+ `scope `.blue.bold +`of the work you done: `);
     message += `(${scope}): `;
     const description = prompt('Enter a description of the work you done: ');
     message += `${description}`;
-    const issueNumber = prompt('Enter the issue number: ');
+    const issueNumber = prompt('Enter the issue number:(leave blank if none)');
     if (Number.isInteger(issueNumber)) {
       message += ` Relates #${issueNumber}`;
       if (readlineSync.keyInYN('Do you want to close the issue?')) {
